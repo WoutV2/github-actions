@@ -1,7 +1,7 @@
 name: Kubernetes Test Pipeline
 
 on:
-  workflow_dispatch: # Allows you to trigger it manually via the GitHub Actions tab
+  workflow_dispatch:
 
 jobs:
   k8s-job:
@@ -13,7 +13,6 @@ jobs:
 
       # 1. Generate a random ID using the first 7 characters of your commit hash
       - name: Generate Random ID
-        id: vars
         run: |
           $shortSha = "${{ github.sha }}".Substring(0, 7)
           Add-Content -Path $env:GITHUB_ENV -Value "POD_ID=$shortSha"
@@ -27,7 +26,7 @@ jobs:
           kind: Pod
           metadata:
             name: mypod-$($env:POD_ID)
-            namespace: default
+            namespace: howest-fastapi-gui
             labels:
               name: mypod
           spec:
@@ -36,10 +35,7 @@ jobs:
               image: rancher/hello-world
           "@
           
-          # Save the manifest to a temporary file
           Set-Content -Path "test-pod.yml" -Value $manifest
-          
-          # Apply it to your local cluster
           kubectl apply -f test-pod.yml
         shell: powershell
 
@@ -47,5 +43,5 @@ jobs:
       - name: Verify Pod Status
         run: |
           Start-Sleep -Seconds 5
-          kubectl get pods -n default
+          kubectl get pods -n howest-fastapi-gui
         shell: powershell
