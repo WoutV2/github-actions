@@ -51,3 +51,11 @@ jobs:
           kubectl rollout restart deployment/fastapi-api -n howest-fastapi-gui
           kubectl rollout status deployment/fastapi-api -n howest-fastapi-gui
         shell: powershell
+
+      - name: Deploy Chart via Helm
+        run: |
+          helm upgrade --install fastapi-release ./charts/fastapi-app `
+            --namespace howest-fastapi-gui --create-namespace `
+            --set image.repository="ghcr.io/woutv2/github-actions/hello-world-nginx" `
+            --set image.tag="latest"
+        shell: powershell
