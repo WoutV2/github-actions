@@ -45,3 +45,9 @@ jobs:
           Start-Sleep -Seconds 5
           kubectl get pods -n howest-fastapi-gui
         shell: powershell
+
+      - name: Rollout Restart Deployment
+        run: |
+          kubectl rollout restart deployment/fastapi-api -n howest-fastapi-gui
+          kubectl rollout status deployment/fastapi-api -n howest-fastapi-gui
+        shell: powershell
